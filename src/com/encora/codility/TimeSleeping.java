@@ -11,8 +11,7 @@ public class TimeSleeping {
         List<String> beginHour = new ArrayList<>();
         List<String> endHour = new ArrayList<>();
 
-
-        meetings.sort(Comparator.comparing(day -> List.of("Mon","Tue","Wed","Thu","Fri","Sat","Sun").indexOf(day.toString().substring(0, 3))).thenComparing((day -> day.toString().substring(5, 10))));
+        meetings.sort(Comparator.comparing(day -> List.of("Mon","Tue","Wed","Thu","Fri","Sat","Sun").indexOf(day.toString().substring(0, 3))).thenComparing((day -> day.toString().substring(4, 6))));
 
         for(String x: meetings){
             String hours = x.substring(4);
@@ -36,14 +35,19 @@ public class TimeSleeping {
                     endHours = Integer.parseInt(beginHour.get(i + 1).split(":")[0]);
                     endMinutes = Integer.parseInt(beginHour.get(i + 1).split(":")[1]);
 
+
                     if(currentDay.equals(nextDay)){
-                        minutes = (60 * ((endHours) - startHours)) - (startMinutes + endMinutes);
+                        if(startHours == endHours && startMinutes == endMinutes){
+                            minutes = 0;
+                        }else{
+                            minutes = (60 * ((endHours) - startHours)) + (startMinutes + endMinutes);
+                        }
                     }else{
-                        minutes = (60 * ((24 - startHours) + endHours)) - (startMinutes + endMinutes);
+                        minutes = (60 * ((24 - startHours) + endHours)) - startMinutes + endMinutes;
                     }
 
                 }else{
-                    minutes = (60 * ((24 - startHours))) - (startMinutes + endMinutes);
+                    minutes = (60 * ((24 - startHours))) + (startMinutes + endMinutes);
                 }
                 if(minutes > longestTimeSleeping){
                     longestTimeSleeping = minutes;
@@ -54,7 +58,7 @@ public class TimeSleeping {
         }catch(IndexOutOfBoundsException ex){
             System.out.println("These are all the meetings");
         }
-
+        System.out.println(meetings);
         return longestTimeSleeping;
     }
 }
