@@ -6,19 +6,15 @@ import java.util.List;
 
 public class TimeSleeping {
     public int longestTimeSleeping(String schedule){
-        String[] meetings = schedule.split("\n");
+        List<String> meetings = new ArrayList<>(List.of(schedule.split("\n")));
         int longestTimeSleeping = 0;
-        List<String> days = new ArrayList<>();
         List<String> beginHour = new ArrayList<>();
         List<String> endHour = new ArrayList<>();
 
+
+        meetings.sort(Comparator.comparing(day -> List.of("Mon","Tue","Wed","Thu","Fri","Sat","Sun").indexOf(day.toString().substring(0, 3))).thenComparing((day -> day.toString().substring(5, 10))));
+
         for(String x: meetings){
-            days.add(x);
-        }
-
-        days.sort(Comparator.comparing(day -> List.of("Mon","Tue","Wed","Thu","Fri","Sat","Sun").indexOf(day.toString().substring(0, 3))).thenComparing((day -> day.toString().substring(5, 10))));
-
-        for(String x: days){
             String hours = x.substring(4);
             beginHour.add(hours.split("-")[0]);
             endHour.add(hours.split("-")[1]);
@@ -34,8 +30,8 @@ public class TimeSleeping {
                 int endMinutes = 0;
 
                 if((i + 1) < beginHour.size()){
-                    String currentDay = days.get(i).substring(0,3);
-                    String nextDay = days.get((i + 1)).substring(0,3);
+                    String currentDay = meetings.get(i).substring(0,3);
+                    String nextDay = meetings.get((i + 1)).substring(0,3);
 
                     endHours = Integer.parseInt(beginHour.get(i + 1).split(":")[0]);
                     endMinutes = Integer.parseInt(beginHour.get(i + 1).split(":")[1]);
